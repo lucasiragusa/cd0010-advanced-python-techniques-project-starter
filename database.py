@@ -55,13 +55,6 @@ class NEODatabase:
 
         # TODO: Link together the NEOs and their close approaches.
 
-        # Nested loop method
-        # for neo in self._neos:
-        #     for approach in self._approaches:
-        #         if neo.designation == approach._designation:
-        #             neo.approaches.append(approach)
-        #             approach.neo = neo
-
         # Dictionary method
         for approach in self._approaches:
             if approach._designation in self.neos_by_designation:
@@ -109,15 +102,6 @@ class NEODatabase:
         else:
             return None
 
-    def filter_approaches(self, filter, approaches):
-        """
-        Filter a list of CloseApproach objects by the given filter.
-        """
-        filtered_approaches = []
-        for approach in approaches:
-            if filter(approach):
-                filtered_approaches.append(approach)
-        return filtered_approaches
 
     def query(self, filters=()):
         """Query close approaches to generate those that match a collection of filters.
@@ -134,26 +118,19 @@ class NEODatabase:
         :return: A stream of matching `CloseApproach` objects.
         """
         # TODO: Generate `CloseApproach` objects that match all of the filters.
-        
-        # if filters == {}:
-        #     for approach in self._approaches:
-        #         yield approach
 
-        # else: 
-            # for approach in self._approaches:
-            #     for filter_operator, filter_attribute in filters.items():
-            #         if filter_operator(filter_attribute[1], getattr(approach, filter_attribute[0])):
-            #             yield approach
-        #     #             break
-        # else:
-        #     ...
-        
-        # First, filter the approaches based on the provided filters.
-        filtered_approaches = self._approaches
-        for filter in filters:
-            filtered_approaches = filter_approaches(filter, filtered_approaches)
 
-        # Yield the filtered approaches.
-        for approach in filtered_approaches:
-            yield approach
-    
+        if filters == {}:
+            for approach in self._approaches:
+                yield approach
+
+        else: 
+            for approach in self._approaches:
+                flag = True
+                for f in filters:
+                    if not f(approach):
+                        flag = False 
+                        break
+ 
+                if flag == True:
+                    yield approach

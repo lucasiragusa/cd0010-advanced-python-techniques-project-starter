@@ -140,44 +140,31 @@ def create_filters(
 
     filters = []
 
-    filters.append(DateFilter(operator.eq, date))
-    filters.append(DateFilter(operator.ge, start_date))
-    filters.append(DateFilter(operator.le, end_date))
-    filters.append(DistanceFilter(operator.ge, distance_min))
-    filters.append(DistanceFilter(operator.le, distance_max))
-    filters.append(VelocityFilter(operator.ge, velocity_min))
-    filters.append(VelocityFilter(operator.le, velocity_max))
-    filters.append(DiameterFilter(operator.ge, diameter_min))
-    filters.append(DiameterFilter(operator.le, diameter_max))
-    if hazardous == 'not-hazardous':
-        filters.append(HazardousFilter(operator.eq, False))
-    else: 
-        filters.append(HazardousFilter(operator.eq, True))
+    if date is not None: 
+        filters.append(DateFilter(operator.eq, date))
+    if start_date is not None:
+        filters.append(DateFilter(operator.ge, start_date))
+    if end_date is not None:
+        filters.append(DateFilter(operator.le, end_date))
+    if distance_min is not None:
+        filters.append(DistanceFilter(operator.ge, distance_min))
+    if distance_max is not None:
+        filters.append(DistanceFilter(operator.le, distance_max))
+    if velocity_min is not None:
+        filters.append(VelocityFilter(operator.ge, velocity_min))
+    if velocity_max is not None:
+        filters.append(VelocityFilter(operator.le, velocity_max))
+    if diameter_min is not None:
+        filters.append(DiameterFilter(operator.ge, diameter_min))
+    if diameter_max is not None:
+        filters.append(DiameterFilter(operator.le, diameter_max))
+    if hazardous is not None:
+        if hazardous == False:
+            filters.append(HazardousFilter(operator.eq, False))
+        else: 
+            filters.append(HazardousFilter(operator.eq, True))
 
     return filters
-    # List representation 
-
-
-
-    # Dictionary representation
-    # filters = {}
-
-    # filters['date'] = AttributeFilter(operator.eq, date)
-    # filters['start_date'] = AttributeFilter(operator.ge, start_date)
-    # filters['end_date'] = AttributeFilter(operator.le, end_date)
-    # filters['distance_min'] = AttributeFilter(operator.ge, distance_min)
-    # filters['distance_max'] = AttributeFilter(operator.le, distance_max)
-    # filters['velocity_min'] = AttributeFilter(operator.ge, velocity_min)
-    # filters['velocity_max'] = AttributeFilter(operator.le, velocity_max)
-    # filters['diameter_min'] = AttributeFilter(operator.ge, diameter_min)
-    # filters['diameter_max'] = AttributeFilter(operator.le, diameter_max)
-    # if hazardous == 'not-hazardous':
-    #     filters['hazardous'] = AttributeFilter(operator.eq, False)
-    # else: 
-    #     filters['hazardous'] = AttributeFilter(operator.eq, True)
-
-    return filters
-
 
 def limit(iterator, n=None):
     """Produce a limited stream of values from an iterator.
